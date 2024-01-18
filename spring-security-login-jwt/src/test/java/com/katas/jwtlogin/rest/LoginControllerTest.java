@@ -62,6 +62,20 @@ class LoginControllerTest {
     }
 
     // should return a meaningful error when the password isn't correct
+    @Test
+    void shouldReturnAMeaningfulErrorWhenIncorrectPassword() throws Exception {
+        var loginCredentials = new LoginCredentials("username", "invalid-password");
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        mockMvc.perform(post("/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(loginCredentials))
+                )
+                .andDo(print())
+                .andExpect(jsonPath("$").value(ExceptionMessagesEnum.WRONG_CREDENTIALS_EXCEPTION.getValue()))
+                .andExpect(status().isBadRequest());
+    }
+
     // should return an object with credentials like authToken, refreshToken, validUntil, role when a valid input is given
 
 }

@@ -3,6 +3,7 @@ package com.katas.jwtlogin.rest;
 import java.util.Optional;
 
 import com.katas.jwtlogin.exception.ExceptionMessagesEnum;
+import com.katas.jwtlogin.exception.IncorrectPasswordException;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,14 @@ class GlobalExceptionHandler {
                 (Integer) Optional.ofNullable(request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE)).orElse(400));
 
         return ResponseEntity.status(status).body(ExceptionMessagesEnum.WRONG_CREDENTIALS_EXCEPTION.getValue());
+    }
+
+    @ExceptionHandler(IncorrectPasswordException.class)
+    ResponseEntity<String> handleIncorrectPassword(HttpServletRequest request) {
+        HttpStatus status = HttpStatus.valueOf(
+                (Integer) Optional.ofNullable(request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE)).orElse(400));
+
+        return ResponseEntity.status(status).body(ExceptionMessagesEnum.INCORRECT_PASSWORD_EXCEPTION.getValue());
     }
 }
 
