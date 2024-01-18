@@ -42,13 +42,26 @@ class LoginControllerTest {
         mockMvc.perform(post("/login")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(jsonPath("$").value(ExceptionMessagesEnum.INVALID_INPUTS.getValue()))
+                .andExpect(jsonPath("$").value(ExceptionMessagesEnum.EMPTY_REQUEST_BODY_EXCEPTION.getValue()))
                 .andExpect(status().isBadRequest());
     }
-    // should return a meaningful error when nothing is sent
-    // should return an object with credentials like authToken, refreshToken, validUntil, role when a valid input is given
+
     // should return a meaningful error when the user is not found
+    @Test
+    void shouldReturnAMeaningfulErrorWhenUserIsNotFound() throws Exception {
+        var loginCredentials = new LoginCredentials("non-username", "password");
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        mockMvc.perform(post("/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(loginCredentials))
+                )
+                .andDo(print())
+                .andExpect(jsonPath("$").value(ExceptionMessagesEnum.WRONG_CREDENTIALS_EXCEPTION.getValue()))
+                .andExpect(status().isBadRequest());
+    }
+
     // should return a meaningful error when the password isn't correct
-    //
+    // should return an object with credentials like authToken, refreshToken, validUntil, role when a valid input is given
 
 }

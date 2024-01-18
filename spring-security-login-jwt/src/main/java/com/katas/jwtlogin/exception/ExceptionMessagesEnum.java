@@ -2,7 +2,8 @@ package com.katas.jwtlogin.exception;
 
 public enum ExceptionMessagesEnum {
 
-    INVALID_INPUTS("The login credentials you have entered aren't correct, please check again.");
+    EMPTY_REQUEST_BODY_EXCEPTION("You didn't send any username or password, please check again."),
+    WRONG_CREDENTIALS_EXCEPTION("The login credentials you have entered aren't correct, please check again.");
 
     private final String value;
 
